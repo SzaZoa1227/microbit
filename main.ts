@@ -1,61 +1,43 @@
-let megy = 0
-let ledek = 0
-let jatek = 0
-input.onButtonPressed(Button.AB, function () {
-    basic.showLeds(`
-        . . . . #
-        . . . # .
-        # . # . .
-        . # . . .
-        . . . . .
-        `)
-    basic.pause(2000)
-    megy = 1
+let dobokocka = 0
+let dontes = 0
+let kockafelsohatar = 0
+input.onGesture(Gesture.Shake, function () {
+    if (dobokocka == 1) {
+        basic.showNumber(randint(1, 6))
+    }
 })
 basic.forever(function () {
-    if (megy == 1) {
-        basic.showLeds(`
-            # . . . .
-            . # . . .
-            # . # . .
-            . # . . .
-            # . . . .
-            `)
+    if (input.buttonIsPressed(Button.A)) {
+        dontes += 1
+        basic.pause(1000)
+    }
+    if (dontes > 1) {
+        dontes = 0
+        basic.clearScreen()
+    }
+    if (input.buttonIsPressed(Button.B)) {
+        dobokocka += 1
         basic.pause(100)
-        basic.showLeds(`
-            . # . . .
-            . . # . .
-            # # . # .
-            . . # . .
-            . # . . .
-            `)
-        basic.pause(100)
-        basic.showLeds(`
-            . . # . .
-            . . . # .
-            # # # . #
-            . . . # .
-            . . # . .
-            `)
-        if (input.buttonIsPressed(Button.B)) {
-            ledek = 1
-            megy = 0
-            basic.clearScreen()
+    }
+    if (dobokocka > 1) {
+        dobokocka = 0
+        kockafelsohatar = 6
+        basic.clearScreen()
+    }
+})
+basic.forever(function () {
+    if (dontes == 1) {
+        if (input.acceleration(Dimension.X) > 20) {
+            basic.showString("J")
+        }
+        if (input.acceleration(Dimension.X) < -20) {
+            basic.showString("B")
+        }
+        if (input.acceleration(Dimension.Y) > 20) {
+            basic.showString("L")
+        }
+        if (input.acceleration(Dimension.Y) < -20) {
+            basic.showString("F")
         }
     }
-    if (ledek == 1) {
-        led.plot(randint(0, 4), 4)
-        led.plot(randint(0, 4), 4)
-        led.plot(randint(0, 4), 4)
-        ledek = 0
-        jatek = 1
-    }
-    if (jatek == 1) {
-        let ledy = 0
-        let ledx = 0
-        led.toggle(ledx, ledy)
-    }
-})
-basic.forever(function () {
-	
 })
